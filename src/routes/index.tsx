@@ -14,6 +14,7 @@ import {
   Users,
   UserPlus,
   Euro,
+  CreditCard,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -268,7 +269,7 @@ function BusOnboard() {
               className="flex h-16 w-16 items-center justify-center rounded-full bg-warning text-warning-foreground shadow-lg active:scale-95"
               aria-label="Sell ticket"
             >
-              <Euro className="h-8 w-8" />
+              <CreditCard className="h-8 w-8" />
             </button>
             <button
               onClick={handleClearTotal}
