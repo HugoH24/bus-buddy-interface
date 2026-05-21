@@ -1,26 +1,286 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import {
+  Menu,
+  MessageSquare,
+  Wifi,
+  WifiOff,
+  Signal,
+  BellOff,
+  CheckCircle2,
+  MapPin,
+  Plus,
+  Minus,
+  Users,
+  UserPlus,
+  Ticket,
+  Calculator,
+} from "lucide-react";
 
 export const Route = createFileRoute("/")({
-  component: Index,
+  component: BusOnboard,
+  head: () => ({
+    meta: [
+      { title: "Bus Onboard Computer" },
+      { name: "description", content: "Onboard ticketing and stops computer for bus drivers." },
+    ],
+  }),
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+type Stop = { code: string; name: string; time: string };
+
+const STOPS: Stop[] = [
+  { code: "001", name: "Central Station", time: "08.00" },
+  { code: "002", name: "Market Square", time: "08.04" },
+  { code: "003", name: "Old Town Hall", time: "08.07" },
+  { code: "004", name: "River Bridge", time: "08.10" },
+  { code: "005", name: "City Park", time: "08.13" },
+  { code: "006", name: "University", time: "08.17" },
+  { code: "007", name: "Hospital", time: "08.21" },
+  { code: "008", name: "North Terminal", time: "08.26" },
+  { code: "009", name: "Industrial Zone", time: "08.31" },
+  { code: "010", name: "Airport", time: "08.40" },
+];
+
+type Fare = { name: string; price: number };
+
+const FARES: Fare[] = [
+  { name: "Adult", price: 1.2 },
+  { name: "Student", price: 0.6 },
+  { name: "Senior", price: 0.5 },
+  { name: "Child (6-15)", price: 0.4 },
+  { name: "Disabled", price: 0.0 },
+  { name: "Disabled + Companion", price: 0.0 },
+  { name: "Luggage small", price: 0.3 },
+  { name: "Luggage large", price: 0.6 },
+  { name: "Bicycle", price: 1.0 },
+  { name: "Stroller", price: 0.0 },
+  { name: "Dog", price: 0.5 },
+  { name: "Staff", price: 0.0 },
+];
+
+function useClock() {
+  const [now, setNow] = useState(new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  return now;
 }
 
-function Index() {
-  return <PlaceholderIndex />;
+function BusOnboard() {
+  const now = useClock();
+  const [currentStopIdx, setCurrentStopIdx] = useState(0);
+  const [destStopIdx, setDestStopIdx] = useState(5);
+  const [fareIdx, setFareIdx] = useState(0);
+  const [qty, setQty] = useState(1);
+  const [passengers, setPassengers] = useState(0);
+  const [newPassengers, setNewPassengers] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  const price = FARES[fareIdx].price * qty;
+
+  // Departure countdown: minutes:seconds until current stop's scheduled time
+  const departureLabel = useMemo(() => {
+    const [h, m] = STOPS[currentStopIdx].time.split(".").map(Number);
+    const sched = new Date(now);
+    sched.setHours(h, m, 0, 0);
+    const diffMs = sched.getTime() - now.getTime();
+    const sign = diffMs < 0 ? "-" : "+";
+    const abs = Math.abs(Math.floor(diffMs / 1000));
+    const mm = String(Math.floor(abs / 60)).padStart(2, "0");
+    const ss = String(abs % 60).padStart(2, "0");
+    return `${sign}${mm}:${ss}`;
+  }, [now, currentStopIdx]);
+
+  const timeStr = now.toLocaleTimeString("en-GB", { hour12: false });
+  const day = now.getDate();
+  const month = now.toLocaleString("en-GB", { month: "short" });
+
+  const handleSell = () => {
+    setTotal((t) => +(t + price).toFixed(2));
+    setPassengers((p) => p + qty);
+    setNewPassengers((p) => p + qty);
+    setQty(1);
+  };
+
+  const handleClearTotal = () => {
+    setTotal(0);
+    setPassengers(0);
+    setNewPassengers(0);
+  };
+
+  return (
+    <div className="flex h-screen w-screen flex-col overflow-hidden bg-background text-foreground select-none">
+      {/* Status bar */}
+      <header className="flex items-center gap-3 bg-status px-4 py-2 text-status-foreground">
+        <button className="rounded p-1 hover:bg-white/10" aria-label="Menu">
+          <Menu className="h-7 w-7" />
+        </button>
+        <div className="flex-1" />
+        <div className="flex items-center gap-4 text-white/95">
+          <MessageSquare className="h-6 w-6" />
+          <WifiOff className="h-6 w-6 opacity-70" />
+          <Wifi className="h-6 w-6" />
+          <Signal className="h-6 w-6" />
+          <BellOff className="h-6 w-6 opacity-70" />
+          <CheckCircle2 className="h-7 w-7 text-white" />
+        </div>
+        <div className="ml-4 flex items-baseline gap-2 tabular-nums">
+          <span className="text-3xl font-light tracking-tight">{timeStr}</span>
+          <div className="flex flex-col items-center leading-none">
+            <span className="text-lg font-semibold">{day}</span>
+            <span className="text-xs uppercase">{month}</span>
+          </div>
+        </div>
+      </header>
+
+      <div className="flex min-h-0 flex-1">
+        {/* Stops list */}
+        <section className="flex min-w-0 flex-[1.4] flex-col overflow-y-auto bg-panel">
+          {STOPS.map((s, i) => {
+            const isCurrent = i === currentStopIdx;
+            const isDest = i === destStopIdx;
+            return (
+              <button
+                key={s.code}
+                onClick={() => setCurrentStopIdx(i)}
+                className={`flex items-center gap-4 border-b border-border px-5 py-4 text-left transition-colors ${
+                  isCurrent
+                    ? "bg-status text-status-foreground"
+                    : "hover:bg-muted"
+                }`}
+              >
+                <div className="w-12 shrink-0">
+                  {isCurrent ? (
+                    <MapPin className="h-7 w-7" />
+                  ) : (
+                    <span className="font-mono text-lg text-muted-foreground">{s.code}</span>
+                  )}
+                </div>
+                <span
+                  className={`flex-1 truncate text-xl ${
+                    isDest && !isCurrent ? "font-semibold text-success" : ""
+                  }`}
+                >
+                  {s.name}
+                </span>
+                <span
+                  className={`tabular-nums text-xl ${
+                    isDest && !isCurrent ? "font-semibold text-success" : ""
+                  }`}
+                >
+                  {s.time}
+                </span>
+              </button>
+            );
+          })}
+        </section>
+
+        {/* Fares list */}
+        <section className="flex min-w-0 flex-1 flex-col overflow-y-auto border-x border-border bg-panel">
+          {FARES.map((f, i) => {
+            const active = i === fareIdx;
+            return (
+              <button
+                key={f.name}
+                onClick={() => setFareIdx(i)}
+                className={`border-b border-border px-5 py-4 text-left text-lg transition-colors ${
+                  active
+                    ? "border-2 border-success font-semibold text-success"
+                    : "text-foreground hover:bg-muted"
+                }`}
+              >
+                {f.name}
+              </button>
+            );
+          })}
+        </section>
+
+        {/* Right control panel */}
+        <aside className="flex w-[340px] shrink-0 flex-col bg-panel">
+          {/* Departure */}
+          <div className="flex items-center justify-between bg-warning px-5 py-3 text-warning-foreground">
+            <div>
+              <div className="text-sm font-medium">Departure</div>
+              <div className="text-4xl font-light tabular-nums">{departureLabel}</div>
+            </div>
+            <button
+              onClick={() => setCurrentStopIdx((i) => Math.min(STOPS.length - 1, i + 1))}
+              className="flex h-14 w-14 flex-col items-center justify-center rounded-full bg-foreground text-xs font-semibold leading-tight text-background"
+            >
+              <span>NEXT</span>
+              <span>STOP</span>
+            </button>
+          </div>
+
+          {/* Passengers */}
+          <div className="flex items-center justify-between border-b border-border px-5 py-4">
+            <div className="space-y-2">
+              <div className="text-sm font-medium text-info">Passengers</div>
+              <div className="flex items-center gap-2 text-info">
+                <Users className="h-5 w-5" />
+                <span className="text-xl tabular-nums">{passengers}</span>
+              </div>
+              <div className="flex items-center gap-2 text-destructive">
+                <UserPlus className="h-5 w-5" />
+                <span className="text-xl tabular-nums">{newPassengers}</span>
+              </div>
+            </div>
+            <div className="flex flex-col items-center gap-2">
+              <button
+                onClick={() => setQty((q) => q + 1)}
+                className="flex h-12 w-12 items-center justify-center rounded-full bg-info text-info-foreground shadow-md active:scale-95"
+                aria-label="Increase"
+              >
+                <Plus className="h-6 w-6" />
+              </button>
+              <span className="text-3xl font-light tabular-nums">{qty}</span>
+              <button
+                onClick={() => setQty((q) => Math.max(1, q - 1))}
+                className="flex h-12 w-12 items-center justify-center rounded-full bg-info text-info-foreground shadow-md active:scale-95"
+                aria-label="Decrease"
+              >
+                <Minus className="h-6 w-6" />
+              </button>
+            </div>
+          </div>
+
+          {/* Price */}
+          <div className="border-b border-border px-5 py-3">
+            <div className="text-sm font-medium text-info">Price</div>
+            <div className="text-right text-4xl font-light tabular-nums">
+              {price.toFixed(2)} €
+            </div>
+          </div>
+
+          {/* Total */}
+          <div className="border-b border-border px-5 py-3">
+            <div className="text-sm font-medium text-info">Total</div>
+            <div className="text-right text-4xl font-light tabular-nums text-info">
+              {total.toFixed(2)} €
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="mt-auto flex items-center justify-around p-5">
+            <button
+              onClick={handleSell}
+              className="flex h-16 w-16 items-center justify-center rounded-full bg-warning text-warning-foreground shadow-lg active:scale-95"
+              aria-label="Sell ticket"
+            >
+              <Ticket className="h-8 w-8" />
+            </button>
+            <button
+              onClick={handleClearTotal}
+              className="flex h-16 w-16 items-center justify-center rounded-full bg-success text-success-foreground shadow-lg active:scale-95"
+              aria-label="Clear total"
+            >
+              <Calculator className="h-8 w-8" />
+            </button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
 }
