@@ -13,8 +13,7 @@ import {
   Minus,
   Users,
   UserPlus,
-  Ticket,
-  Calculator,
+  Euro,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -269,14 +268,14 @@ function BusOnboard() {
               className="flex h-16 w-16 items-center justify-center rounded-full bg-warning text-warning-foreground shadow-lg active:scale-95"
               aria-label="Sell ticket"
             >
-              <Ticket className="h-8 w-8" />
+              <Euro className="h-8 w-8" />
             </button>
             <button
               onClick={handleClearTotal}
               className="flex h-16 w-16 items-center justify-center rounded-full bg-success text-success-foreground shadow-lg active:scale-95"
               aria-label="Clear total"
             >
-              <Calculator className="h-8 w-8" />
+              <Euro className="h-8 w-8" />
             </button>
           </div>
         </aside>
