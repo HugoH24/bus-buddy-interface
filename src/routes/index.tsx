@@ -138,7 +138,13 @@ function BusOnboard() {
 
       <div className="flex min-h-0 flex-1">
         {/* Stops list */}
-        <section className="flex min-w-0 flex-[1.4] flex-col overflow-y-auto bg-panel">
+        <section className="relative flex min-w-0 flex-[1.4] flex-col overflow-y-auto bg-panel">
+          {/* Continuous dotted connector spanning all stops */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute top-0 bottom-0 z-10 border-l-2 border-dotted border-muted-foreground/60"
+            style={{ left: "calc(1.25rem + 1.5rem)" }}
+          />
           {STOPS.map((s, i) => {
             const isCurrent = i === currentStopIdx;
             const isDest = i === destStopIdx;
@@ -146,26 +152,18 @@ function BusOnboard() {
               <button
                 key={s.code}
                 onClick={() => setCurrentStopIdx(i)}
-                className={`flex items-center gap-4 border-b border-border px-5 py-4 text-left transition-colors ${
+                className={`relative flex items-center gap-4 border-b border-border px-5 py-4 text-left transition-colors ${
                   isCurrent
                     ? "bg-status text-status-foreground"
                     : "hover:bg-muted"
                 }`}
               >
-                <div className="relative flex w-12 shrink-0 items-center justify-center">
-                  <span
-                    aria-hidden
-                    className={`pointer-events-none absolute left-1/2 top-0 bottom-0 -translate-x-1/2 border-l-2 border-dotted ${
-                      isCurrent ? "border-status-foreground/50" : "border-muted-foreground/50"
-                    }`}
-                  />
-                  <div className="relative px-1">
-                    {isCurrent ? (
-                      <MapPin className="h-7 w-7" />
-                    ) : (
-                      <span className="font-mono text-lg text-muted-foreground">{s.code}</span>
-                    )}
-                  </div>
+                <div className="relative z-20 flex w-12 shrink-0 items-center justify-center">
+                  {isCurrent ? (
+                    <MapPin className="h-7 w-7" />
+                  ) : (
+                    <span className="font-mono text-lg text-muted-foreground">{s.code}</span>
+                  )}
                 </div>
                 <span
                   className={`flex-1 truncate text-xl ${
@@ -185,6 +183,7 @@ function BusOnboard() {
             );
           })}
         </section>
+
 
         {/* Fares list */}
         <section className="flex min-w-0 flex-1 flex-col overflow-y-auto border-x border-border bg-panel">
