@@ -15,6 +15,7 @@ import {
   UserPlus,
   Euro,
   CreditCard,
+  Bus,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
