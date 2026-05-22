@@ -159,7 +159,7 @@ function BusOnboard() {
                       isCurrent ? "border-status-foreground/50" : "border-muted-foreground/50"
                     }`}
                   />
-                  <div className={`relative ${isCurrent ? "" : "bg-panel px-1"}`}>
+                  <div className="relative bg-panel px-1">
                     {isCurrent ? (
                       <MapPin className="h-7 w-7" />
                     ) : (
