@@ -208,10 +208,10 @@ function BusOnboard() {
             </div>
             <button
               onClick={() => setCurrentStopIdx((i) => Math.min(STOPS.length - 1, i + 1))}
-              className="flex h-14 w-14 flex-col items-center justify-center rounded-full bg-foreground text-xs font-semibold leading-tight text-background"
+              className="flex h-14 w-14 items-center justify-center rounded-full bg-foreground text-background"
+              aria-label="Next stop"
             >
-              <span>NEXT</span>
-              <span>STOP</span>
+              <Bus className="h-8 w-8" />
             </button>
           </div>
 
