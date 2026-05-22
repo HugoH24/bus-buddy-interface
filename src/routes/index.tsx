@@ -152,12 +152,20 @@ function BusOnboard() {
                     : "hover:bg-muted"
                 }`}
               >
-                <div className="w-12 shrink-0">
-                  {isCurrent ? (
-                    <MapPin className="h-7 w-7" />
-                  ) : (
-                    <span className="font-mono text-lg text-muted-foreground">{s.code}</span>
-                  )}
+                <div className="relative flex w-12 shrink-0 items-center justify-center">
+                  <span
+                    aria-hidden
+                    className={`pointer-events-none absolute left-1/2 top-0 bottom-0 -translate-x-1/2 border-l-2 border-dotted ${
+                      isCurrent ? "border-status-foreground/50" : "border-muted-foreground/50"
+                    }`}
+                  />
+                  <div className={`relative ${isCurrent ? "" : "bg-panel px-1"}`}>
+                    {isCurrent ? (
+                      <MapPin className="h-7 w-7" />
+                    ) : (
+                      <span className="font-mono text-lg text-muted-foreground">{s.code}</span>
+                    )}
+                  </div>
                 </div>
                 <span
                   className={`flex-1 truncate text-xl ${
