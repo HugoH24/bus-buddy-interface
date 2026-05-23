@@ -120,7 +120,7 @@ function BusOnboard() {
   };
 
   return (
-    <div className="flex h-screen w-screen flex-col overflow-hidden bg-background text-foreground select-none">
+    <div className="relative flex h-screen w-screen flex-col overflow-hidden bg-background text-foreground select-none">
       {/* Status bar */}
       <header className="flex items-center gap-3 bg-status px-4 py-2 text-status-foreground">
         <button
@@ -140,10 +140,10 @@ function BusOnboard() {
           <CheckCircle2 className="h-7 w-7 text-white" />
         </div>
         <div className="ml-4 flex items-baseline gap-2 tabular-nums">
-          <span className="text-3xl font-light tracking-tight">{timeStr}</span>
+          <span className="text-3xl font-light tracking-tight" suppressHydrationWarning>{timeStr}</span>
           <div className="flex flex-col items-center leading-none">
-            <span className="text-lg font-semibold">{day}</span>
-            <span className="text-xs uppercase">{month}</span>
+            <span className="text-lg font-semibold" suppressHydrationWarning>{day}</span>
+            <span className="text-xs uppercase" suppressHydrationWarning>{month}</span>
           </div>
         </div>
       </header>
@@ -369,7 +369,7 @@ function SettingsMenu({ onClose }: { onClose: () => void }) {
   const active = SETTINGS_CATEGORIES.find((c) => c.key === activeKey)!;
 
   return (
-    <div className="absolute inset-x-0 bottom-0 top-[52px] z-50 flex bg-white">
+    <div className="absolute inset-x-0 bottom-0 top-16 z-50 flex bg-white">
       {/* Sidebar */}
       <nav className="flex w-72 shrink-0 flex-col overflow-y-auto border-r border-border bg-white">
         {SETTINGS_CATEGORIES.map((cat) => {
