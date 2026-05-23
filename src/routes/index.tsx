@@ -123,7 +123,11 @@ function BusOnboard() {
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-background text-foreground select-none">
       {/* Status bar */}
       <header className="flex items-center gap-3 bg-status px-4 py-2 text-status-foreground">
-        <button className="rounded p-1 hover:bg-white/10" aria-label="Menu">
+        <button
+          onClick={() => setSettingsOpen(true)}
+          className="rounded p-1 hover:bg-white/10"
+          aria-label="Menu"
+        >
           <Menu className="h-7 w-7" />
         </button>
         <div className="flex-1" />
