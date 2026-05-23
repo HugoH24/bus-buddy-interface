@@ -120,7 +120,7 @@ function BusOnboard() {
   };
 
   return (
-    <div className="flex h-screen w-screen flex-col overflow-hidden bg-background text-foreground select-none">
+    <div className="relative flex h-screen w-screen flex-col overflow-hidden bg-background text-foreground select-none">
       {/* Status bar */}
       <header className="flex items-center gap-3 bg-status px-4 py-2 text-status-foreground">
         <button
