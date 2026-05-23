@@ -16,6 +16,13 @@ import {
   Euro,
   CreditCard,
   Bus,
+  Circle,
+  Settings as SettingsIcon,
+  Printer,
+  Headphones,
+  HelpCircle,
+  Info,
+  X,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
