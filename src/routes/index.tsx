@@ -403,13 +403,6 @@ function SettingsMenu({ onClose }: { onClose: () => void }) {
 
       {/* Content */}
       <div className="relative flex-1 overflow-y-auto bg-white">
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 rounded p-2 text-muted-foreground hover:bg-muted"
-          aria-label="Close settings"
-        >
-          <X className="h-6 w-6" />
-        </button>
         <div className="divide-y divide-border">
           {active.items.map((item) => (
             <div
