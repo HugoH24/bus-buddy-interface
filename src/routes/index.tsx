@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
   Menu,
+  ChevronLeft,
   MessageSquare,
   Wifi,
   Signal,
@@ -22,7 +23,6 @@ import {
   Headphones,
   HelpCircle,
   Info,
-  X,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
