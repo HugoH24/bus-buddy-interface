@@ -140,10 +140,10 @@ function BusOnboard() {
           <CheckCircle2 className="h-7 w-7 text-white" />
         </div>
         <div className="ml-4 flex items-baseline gap-2 tabular-nums">
-          <span className="text-3xl font-light tracking-tight">{timeStr}</span>
+          <span className="text-3xl font-light tracking-tight" suppressHydrationWarning>{timeStr}</span>
           <div className="flex flex-col items-center leading-none">
-            <span className="text-lg font-semibold">{day}</span>
-            <span className="text-xs uppercase">{month}</span>
+            <span className="text-lg font-semibold" suppressHydrationWarning>{day}</span>
+            <span className="text-xs uppercase" suppressHydrationWarning>{month}</span>
           </div>
         </div>
       </header>
