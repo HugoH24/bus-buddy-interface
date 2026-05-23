@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
   Menu,
+  ChevronLeft,
   MessageSquare,
   Wifi,
   Signal,
@@ -22,7 +23,6 @@ import {
   Headphones,
   HelpCircle,
   Info,
-  X,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -124,11 +124,15 @@ function BusOnboard() {
       {/* Status bar */}
       <header className="flex items-center gap-3 bg-status px-4 py-2 text-status-foreground">
         <button
-          onClick={() => setSettingsOpen(true)}
+          onClick={() => setSettingsOpen((o) => !o)}
           className="rounded p-1 hover:bg-white/10"
-          aria-label="Menu"
+          aria-label={settingsOpen ? "Back" : "Menu"}
         >
-          <Menu className="h-7 w-7" />
+          {settingsOpen ? (
+            <ChevronLeft className="h-7 w-7" />
+          ) : (
+            <Menu className="h-7 w-7" />
+          )}
         </button>
         <div className="flex-1" />
         <div className="flex items-center gap-4 text-white/95">
@@ -399,13 +403,6 @@ function SettingsMenu({ onClose }: { onClose: () => void }) {
 
       {/* Content */}
       <div className="relative flex-1 overflow-y-auto bg-white">
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 rounded p-2 text-muted-foreground hover:bg-muted"
-          aria-label="Close settings"
-        >
-          <X className="h-6 w-6" />
-        </button>
         <div className="divide-y divide-border">
           {active.items.map((item) => (
             <div
