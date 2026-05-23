@@ -155,15 +155,11 @@ function BusOnboard() {
       <div className="flex min-h-0 flex-1">
         {/* Stops list */}
         <section className="relative flex min-w-0 flex-[1.4] flex-col overflow-y-auto bg-panel">
-          {/* Continuous dotted connector spanning all stops */}
-          <span
-            aria-hidden
-            className="pointer-events-none absolute top-0 bottom-0 z-10 border-l-2 border-dotted border-muted-foreground/60"
-            style={{ left: "calc(1.25rem + 1.5rem)" }}
-          />
           {STOPS.map((s, i) => {
             const isCurrent = i === currentStopIdx;
             const isDest = i === destStopIdx;
+            const isFirst = i === 0;
+            const isLast = i === STOPS.length - 1;
             return (
               <button
                 key={s.code}
@@ -174,7 +170,30 @@ function BusOnboard() {
                     : "hover:bg-muted"
                 }`}
               >
-                <div className="relative z-20 flex w-12 shrink-0 items-center justify-center">
+                {/* Dotted connector segments — break around the number, end at last stop */}
+                {!isFirst && (
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute z-20 border-l-2 border-dotted border-muted-foreground/70"
+                    style={{
+                      left: "calc(1.25rem + 1.5rem)",
+                      top: 0,
+                      height: "calc(50% - 1.1rem)",
+                    }}
+                  />
+                )}
+                {!isLast && (
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute z-20 border-l-2 border-dotted border-muted-foreground/70"
+                    style={{
+                      left: "calc(1.25rem + 1.5rem)",
+                      top: "calc(50% + 1.1rem)",
+                      bottom: 0,
+                    }}
+                  />
+                )}
+                <div className="relative z-30 flex w-12 shrink-0 items-center justify-center">
                   {isCurrent ? (
                     <MapPin className="h-7 w-7" />
                   ) : (
@@ -199,6 +218,7 @@ function BusOnboard() {
             );
           })}
         </section>
+
 
 
         {/* Fares list */}
