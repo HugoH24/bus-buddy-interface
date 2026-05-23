@@ -369,7 +369,7 @@ function SettingsMenu({ onClose }: { onClose: () => void }) {
   const active = SETTINGS_CATEGORIES.find((c) => c.key === activeKey)!;
 
   return (
-    <div className="absolute inset-x-0 bottom-0 top-[52px] z-50 flex bg-white">
+    <div className="absolute inset-x-0 bottom-0 top-16 z-50 flex bg-white">
       {/* Sidebar */}
       <nav className="flex w-72 shrink-0 flex-col overflow-y-auto border-r border-border bg-white">
         {SETTINGS_CATEGORIES.map((cat) => {
