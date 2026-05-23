@@ -16,6 +16,13 @@ import {
   Euro,
   CreditCard,
   Bus,
+  Circle,
+  Settings as SettingsIcon,
+  Printer,
+  Headphones,
+  HelpCircle,
+  Info,
+  X,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -78,6 +85,7 @@ function BusOnboard() {
   const [passengers, setPassengers] = useState(0);
   const [newPassengers, setNewPassengers] = useState(0);
   const [total, setTotal] = useState(0);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const price = FARES[fareIdx].price * qty;
 
@@ -115,7 +123,11 @@ function BusOnboard() {
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-background text-foreground select-none">
       {/* Status bar */}
       <header className="flex items-center gap-3 bg-status px-4 py-2 text-status-foreground">
-        <button className="rounded p-1 hover:bg-white/10" aria-label="Menu">
+        <button
+          onClick={() => setSettingsOpen(true)}
+          className="rounded p-1 hover:bg-white/10"
+          aria-label="Menu"
+        >
           <Menu className="h-7 w-7" />
         </button>
         <div className="flex-1" />
@@ -288,6 +300,131 @@ function BusOnboard() {
             </button>
           </div>
         </aside>
+      </div>
+
+      {settingsOpen && (
+        <SettingsMenu onClose={() => setSettingsOpen(false)} />
+      )}
+    </div>
+  );
+}
+
+type SettingsCategory = {
+  key: string;
+  label: string;
+  icon: typeof Circle;
+  items: { title: string; desc: string; action: string }[];
+};
+
+const SETTINGS_CATEGORIES: SettingsCategory[] = [
+  {
+    key: "vseobecne",
+    label: "Všeobecné",
+    icon: Circle,
+    items: [
+      {
+        title: "Odchýlkový spoj",
+        desc: "Zobrazí okno pre výber odchýlkovej linky, spoja a zastávok",
+        action: "Vykonať",
+      },
+      {
+        title: "Stiahnutie parametrov pre EMV terminál",
+        desc: "Pošle EMV termináli transakciu Volanie parametrov na Terminal Management",
+        action: "Vykonať",
+      },
+      {
+        title: "Volanie na Terminal Management Banky",
+        desc: "Aktivuje volanie na Terminal Management Banky",
+        action: "Vykonať",
+      },
+    ],
+  },
+  {
+    key: "odpocty",
+    label: "Odpočty",
+    icon: Euro,
+    items: [
+      { title: "Predbežný odpočet", desc: "Vytlačí predbežný odpočet", action: "Vytlačiť" },
+      {
+        title: "Uzatvor DŽV",
+        desc: "Zobrazí okno pre uzatvorenie denného záznamu vozidla",
+        action: "Vykonať",
+      },
+      {
+        title: "Opakovanie tlače koncového lístka",
+        desc: "Vytlačí kópiu predošlého koncového lístka",
+        action: "Vykonať",
+      },
+    ],
+  },
+  { key: "nastavenia", label: "Nastavenia", icon: SettingsIcon, items: [] },
+  { key: "zariadenia", label: "Zariadenia", icon: Printer, items: [] },
+  { key: "dispecing", label: "Dispečing", icon: Headphones, items: [] },
+  { key: "pomoc", label: "Pomoc", icon: HelpCircle, items: [] },
+  { key: "systemove", label: "Systémové info.", icon: Info, items: [] },
+];
+
+function SettingsMenu({ onClose }: { onClose: () => void }) {
+  const [activeKey, setActiveKey] = useState("vseobecne");
+  const active = SETTINGS_CATEGORIES.find((c) => c.key === activeKey)!;
+
+  return (
+    <div className="absolute inset-x-0 bottom-0 top-[52px] z-50 flex bg-white">
+      {/* Sidebar */}
+      <nav className="flex w-72 shrink-0 flex-col overflow-y-auto border-r border-border bg-white">
+        {SETTINGS_CATEGORIES.map((cat) => {
+          const Icon = cat.icon;
+          const isActive = cat.key === activeKey;
+          return (
+            <button
+              key={cat.key}
+              onClick={() => setActiveKey(cat.key)}
+              className={`flex items-center gap-4 border-b border-border px-5 py-5 text-left text-xl transition-colors ${
+                isActive
+                  ? "bg-success text-success-foreground"
+                  : "text-foreground hover:bg-muted"
+              }`}
+            >
+              <Icon
+                className={`h-9 w-9 ${
+                  isActive ? "text-success-foreground" : "text-muted-foreground"
+                }`}
+                strokeWidth={isActive ? 2 : 2}
+              />
+              <span className={isActive ? "font-medium" : ""}>{cat.label}</span>
+            </button>
+          );
+        })}
+      </nav>
+
+      {/* Content */}
+      <div className="relative flex-1 overflow-y-auto bg-white">
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 rounded p-2 text-muted-foreground hover:bg-muted"
+          aria-label="Close settings"
+        >
+          <X className="h-6 w-6" />
+        </button>
+        <div className="divide-y divide-border">
+          {active.items.map((item) => (
+            <div
+              key={item.title}
+              className="flex items-center justify-between gap-6 px-8 py-6"
+            >
+              <div className="min-w-0 flex-1">
+                <div className="text-lg font-semibold text-foreground">{item.title}</div>
+                <div className="mt-1 text-sm text-muted-foreground">{item.desc}</div>
+              </div>
+              <button className="shrink-0 rounded border border-border bg-muted px-8 py-2 text-base text-foreground shadow-sm hover:bg-accent">
+                {item.action}
+              </button>
+            </div>
+          ))}
+          {active.items.length === 0 && (
+            <div className="px-8 py-10 text-muted-foreground">Žiadne položky.</div>
+          )}
+        </div>
       </div>
     </div>
   );
