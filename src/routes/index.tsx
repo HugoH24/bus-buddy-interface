@@ -251,7 +251,7 @@ function BusOnboard() {
           <div className="flex items-center justify-between bg-warning px-5 py-3 text-warning-foreground">
             <div>
               <div className="text-sm font-medium">Odchod</div>
-              <div className="text-4xl font-light tabular-nums">{departureLabel}</div>
+              <div className="text-4xl font-light tabular-nums" suppressHydrationWarning>{departureLabel}</div>
             </div>
             <button
               onClick={() => setCurrentStopIdx((i) => Math.min(STOPS.length - 1, i + 1))}
