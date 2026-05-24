@@ -341,10 +341,12 @@ function BusOnboard() {
             <span>{FARES[fareIdx].name}:</span>
             <span className="tabular-nums">{price.toFixed(2)}€</span>
           </div>
-          <Printer
-            className="mt-20 h-40 w-40 text-info"
-            strokeWidth={1.25}
+          <img
+            src={cardTerminalImg}
+            alt="Priložte kartu"
+            className="mt-16 h-56 w-auto"
           />
+
         </div>
       )}
     </div>
