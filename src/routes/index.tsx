@@ -333,6 +333,20 @@ function BusOnboard() {
       {settingsOpen && (
         <SettingsMenu onClose={() => setSettingsOpen(false)} />
       )}
+
+      {cardOverlay && (
+        <div className="absolute inset-x-0 bottom-0 top-16 z-50 flex flex-col items-center justify-center bg-[oklch(0.96_0.005_240)] px-6">
+          <h2 className="text-5xl font-light text-info">Priložte kartu</h2>
+          <div className="mt-6 flex items-baseline gap-6 text-3xl text-muted-foreground">
+            <span>{FARES[fareIdx].name}:</span>
+            <span className="tabular-nums">{price.toFixed(2)}€</span>
+          </div>
+          <Printer
+            className="mt-20 h-40 w-40 text-info"
+            strokeWidth={1.25}
+          />
+        </div>
+      )}
     </div>
   );
 }
