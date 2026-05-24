@@ -86,6 +86,7 @@ function BusOnboard() {
   const [newPassengers, setNewPassengers] = useState(0);
   const [total, setTotal] = useState(0);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [cardOverlay, setCardOverlay] = useState(false);
 
   const price = FARES[fareIdx].price * qty;
 
