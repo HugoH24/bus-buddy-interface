@@ -86,6 +86,7 @@ function BusOnboard() {
   const [newPassengers, setNewPassengers] = useState(0);
   const [total, setTotal] = useState(0);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [cardOverlay, setCardOverlay] = useState(false);
 
   const price = FARES[fareIdx].price * qty;
 
@@ -124,11 +125,14 @@ function BusOnboard() {
       {/* Status bar */}
       <header className="flex items-center gap-3 bg-status px-4 py-2 text-status-foreground">
         <button
-          onClick={() => setSettingsOpen((o) => !o)}
+          onClick={() => {
+            if (cardOverlay) setCardOverlay(false);
+            else setSettingsOpen((o) => !o);
+          }}
           className="rounded p-1 hover:bg-white/10"
-          aria-label={settingsOpen ? "Back" : "Menu"}
+          aria-label={settingsOpen || cardOverlay ? "Back" : "Menu"}
         >
-          {settingsOpen ? (
+          {settingsOpen || cardOverlay ? (
             <ChevronLeft className="h-7 w-7" />
           ) : (
             <Menu className="h-7 w-7" />
@@ -247,7 +251,7 @@ function BusOnboard() {
           <div className="flex items-center justify-between bg-warning px-5 py-3 text-warning-foreground">
             <div>
               <div className="text-sm font-medium">Odchod</div>
-              <div className="text-4xl font-light tabular-nums">{departureLabel}</div>
+              <div className="text-4xl font-light tabular-nums" suppressHydrationWarning>{departureLabel}</div>
             </div>
             <button
               onClick={() => setCurrentStopIdx((i) => Math.min(STOPS.length - 1, i + 1))}
@@ -309,9 +313,9 @@ function BusOnboard() {
           {/* Actions */}
           <div className="mt-auto flex items-center justify-around p-5">
             <button
-              onClick={handleSell}
+              onClick={() => setCardOverlay(true)}
               className="flex h-16 w-16 items-center justify-center rounded-full bg-warning text-warning-foreground shadow-lg active:scale-95"
-              aria-label="Sell ticket"
+              aria-label="Pay by card"
             >
               <CreditCard className="h-8 w-8" />
             </button>
@@ -328,6 +332,20 @@ function BusOnboard() {
 
       {settingsOpen && (
         <SettingsMenu onClose={() => setSettingsOpen(false)} />
+      )}
+
+      {cardOverlay && (
+        <div className="absolute inset-x-0 bottom-0 top-16 z-50 flex flex-col items-center justify-center bg-[oklch(0.96_0.005_240)] px-6">
+          <h2 className="text-5xl font-light text-info">Priložte kartu</h2>
+          <div className="mt-6 flex items-baseline gap-6 text-3xl text-muted-foreground">
+            <span>{FARES[fareIdx].name}:</span>
+            <span className="tabular-nums">{price.toFixed(2)}€</span>
+          </div>
+          <Printer
+            className="mt-20 h-40 w-40 text-info"
+            strokeWidth={1.25}
+          />
+        </div>
       )}
     </div>
   );
