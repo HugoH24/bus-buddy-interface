@@ -125,11 +125,14 @@ function BusOnboard() {
       {/* Status bar */}
       <header className="flex items-center gap-3 bg-status px-4 py-2 text-status-foreground">
         <button
-          onClick={() => setSettingsOpen((o) => !o)}
+          onClick={() => {
+            if (cardOverlay) setCardOverlay(false);
+            else setSettingsOpen((o) => !o);
+          }}
           className="rounded p-1 hover:bg-white/10"
-          aria-label={settingsOpen ? "Back" : "Menu"}
+          aria-label={settingsOpen || cardOverlay ? "Back" : "Menu"}
         >
-          {settingsOpen ? (
+          {settingsOpen || cardOverlay ? (
             <ChevronLeft className="h-7 w-7" />
           ) : (
             <Menu className="h-7 w-7" />
