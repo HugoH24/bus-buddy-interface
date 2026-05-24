@@ -246,7 +246,7 @@ function BusOnboard() {
           {/* Departure */}
           <div className="flex items-center justify-between bg-warning px-5 py-3 text-warning-foreground">
             <div>
-              <div className="text-sm font-medium">Departure</div>
+              <div className="text-sm font-medium">Odchod</div>
               <div className="text-4xl font-light tabular-nums">{departureLabel}</div>
             </div>
             <button
@@ -261,7 +261,7 @@ function BusOnboard() {
           {/* Passengers */}
           <div className="flex items-center justify-between border-b border-border px-5 py-4">
             <div className="space-y-2">
-              <div className="text-sm font-medium text-info">Passengers</div>
+              <div className="text-sm font-medium text-info">Cestujúci</div>
               <div className="flex items-center gap-2 text-info">
                 <Users className="h-5 w-5" />
                 <span className="text-xl tabular-nums">{passengers}</span>
@@ -292,7 +292,7 @@ function BusOnboard() {
 
           {/* Price */}
           <div className="border-b border-border px-5 py-3">
-            <div className="text-sm font-medium text-info">Price</div>
+            <div className="text-sm font-medium text-info">Cena</div>
             <div className="text-right text-4xl font-light tabular-nums">
               {price.toFixed(2)} €
             </div>
@@ -300,7 +300,7 @@ function BusOnboard() {
 
           {/* Total */}
           <div className="border-b border-border px-5 py-3">
-            <div className="text-sm font-medium text-info">Total</div>
+            <div className="text-sm font-medium text-info">Súčet</div>
             <div className="text-right text-4xl font-light tabular-nums text-info">
               {total.toFixed(2)} €
             </div>
