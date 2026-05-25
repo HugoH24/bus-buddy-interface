@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import cardTerminalImg from "@/assets/card-terminal.png";
+import cardSound from "@/assets/card.mp3";
 import {
   Menu,
   ChevronLeft,
@@ -314,7 +315,13 @@ function BusOnboard() {
           {/* Actions */}
           <div className="mt-auto flex items-center justify-around p-5">
             <button
-              onClick={() => setCardOverlay(true)}
+              onClick={() => {
+                try {
+                  const audio = new Audio(cardSound);
+                  audio.play().catch(() => {});
+                } catch {}
+                setCardOverlay(true);
+              }}
               className="flex h-16 w-16 items-center justify-center rounded-full bg-warning text-warning-foreground shadow-lg active:scale-95"
               aria-label="Pay by card"
             >
