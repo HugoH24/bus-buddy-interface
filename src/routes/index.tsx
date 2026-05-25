@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import cardTerminalImg from "@/assets/card-terminal.png";
+import cardSound from "@/assets/card.mp3";
 import {
   Menu,
   ChevronLeft,
