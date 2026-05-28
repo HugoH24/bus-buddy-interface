@@ -171,10 +171,10 @@ function BusOnboard() {
                 key={s.code}
                 onClick={() => setCurrentStopIdx(i)}
                 className={`relative flex items-center gap-4 border-b border-border px-5 py-4 text-left transition-colors ${
-                  isCurrent
+                  isCurrent || isFirst
                     ? "bg-status text-status-foreground"
                     : "hover:bg-muted"
-                }`}
+                } ${isFirst ? "sticky top-0 z-40 shadow-md" : ""}`}
               >
                 {/* Dotted connector segments — break around the number, end at last stop */}
                 {!isFirst && (
@@ -203,7 +203,7 @@ function BusOnboard() {
                   {isCurrent ? (
                     <MapPin className="h-7 w-7" />
                   ) : (
-                    <span className="font-mono text-lg text-muted-foreground">{s.code}</span>
+                    <span className={`font-mono text-lg ${!isCurrent && !isFirst ? "text-muted-foreground" : ""}`}>{s.code}</span>
                   )}
                 </div>
                 <span
