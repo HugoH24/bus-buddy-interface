@@ -237,7 +237,7 @@ function BusOnboard() {
                 onClick={() => setFareIdx(i)}
                 className={`border-b border-border px-5 py-4 text-left text-lg transition-colors ${
                   active
-                    ? "border-2 border-success font-semibold text-success"
+                    ? "bg-[oklch(0.55_0.04_160)] font-semibold uppercase tracking-wider text-[oklch(0.92_0.03_160)] shadow-inner [font-family:'Courier_New',monospace] [text-shadow:0_0_4px_oklch(0.95_0.05_160)]"
                     : "text-foreground hover:bg-muted"
                 }`}
               >
